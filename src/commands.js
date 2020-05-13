@@ -1,4 +1,9 @@
 const { validateDate } = require('./helpers.js');
+const { JsonDB } = require('node-json-db');
+const { Config } = require('node-json-db/dist/lib/JsonDBConfig');
+
+// Initialize JsonDB
+let db = new JsonDB(new Config('grocery-list', true, true, '/'));
 
 let addGroceryItem = (ctx) => {
     let splitInput = ctx.message.text.split(/\s+/g);
@@ -18,6 +23,7 @@ let addGroceryItem = (ctx) => {
         grocery: groceryItem,
         expiration_date: splitInput[splitInput.length-1]
     };
+    db.push(`/${userId}`, [dataSet], false);
     return ctx.replyWithMarkdown(`*Added*. Your product is *${dataSet.grocery}* that expires at *${dataSet.expiration_date}*`);
 }
 
