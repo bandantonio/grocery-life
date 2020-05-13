@@ -1,6 +1,7 @@
 const Telegraf = require('telegraf');
 require('dotenv').config();
-const { addGroceryItem } = require('./src/commands.js');
+const { addGroceryItem, getGroceryItems } = require('./src/commands.js');
+const { formatDbResponse } = require('./src/helpers.js');
 
 // Instantiate a new bot
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
@@ -11,6 +12,10 @@ Type /help for more information about how to use the bot`
 
 bot.command('add', (ctx) => {
     addGroceryItem(ctx);
+});
+
+bot.command('get', (ctx) => {
+    ctx.reply(formatDbResponse(getGroceryItems(ctx.from.id)));
 });
 
 bot.command('help', (ctx) => {

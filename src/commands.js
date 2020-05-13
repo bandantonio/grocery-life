@@ -1,6 +1,8 @@
 const { validateDate } = require('./helpers.js');
 const { JsonDB } = require('node-json-db');
 const { Config } = require('node-json-db/dist/lib/JsonDBConfig');
+const fs = require('fs');
+const path = require('path');
 
 // Initialize JsonDB
 let db = new JsonDB(new Config('grocery-list', true, true, '/'));
@@ -27,6 +29,13 @@ let addGroceryItem = (ctx) => {
     return ctx.replyWithMarkdown(`*Added*. Your product is *${dataSet.grocery}* that expires at *${dataSet.expiration_date}*`);
 }
 
+let getGroceryItems = (userId) => {
+    let contents = JSON.parse(fs.readFileSync(path.resolve('grocery-list.json'), 'utf8'));
+    let filteredContent = Array.from(contents[userId + '']);
+    return filteredContent;
+}
+
 module.exports = {
-    addGroceryItem
+    addGroceryItem,
+    getGroceryItems
 }
