@@ -35,7 +35,20 @@ let getGroceryItems = (userId) => {
     return filteredContent;
 }
 
+// TODO: expiration is not currently set - anything bigger than Date.now() is good
+let getExpiringGroceryItems = (userId) => {
+    let currentDate = Date.now();
+    let contents = JSON.parse(fs.readFileSync(path.resolve('grocery-list.json'), 'utf8'));
+    let filteredContent = Array.from(contents[userId + '']);
+    let listOfExpiringItems = filteredContent.filter(item => {
+        let itemExpirationInMs = new Date(item.expiration_date).getTime();
+        return itemExpirationInMs > currentDate;
+    });
+    return listOfExpiringItems;
+}
+
 module.exports = {
     addGroceryItem,
-    getGroceryItems
+    getGroceryItems,
+    getExpiringGroceryItems
 }

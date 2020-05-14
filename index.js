@@ -2,6 +2,7 @@ const Telegraf = require('telegraf');
 require('dotenv').config();
 const { addGroceryItem, getGroceryItems } = require('./src/commands.js');
 const { formatDbResponse } = require('./src/helpers.js');
+const { enableNotificationsForUser } = require('./src/cron.js');
 
 // Instantiate a new bot
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
@@ -16,6 +17,10 @@ bot.command('add', (ctx) => {
 
 bot.command('get', (ctx) => {
     ctx.reply(formatDbResponse(getGroceryItems(ctx.from.id)));
+});
+
+bot.command('cron', (ctx) => {
+    enableNotificationsForUser(ctx.from.id);
 });
 
 bot.command('help', (ctx) => {

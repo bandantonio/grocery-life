@@ -1,4 +1,4 @@
-let emoji = require('node-emoji');
+const emoji = require('node-emoji');
 
 let validateDate = (date) => {
     let dateRegex = /^\d{4}[-.\/]\d{1,2}[-.\/]\d{1,2}$/ig;
