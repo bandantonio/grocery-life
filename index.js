@@ -1,4 +1,5 @@
 const Telegraf = require('telegraf');
+require('./server');
 require('dotenv').config();
 const { addGroceryItem, getGroceryItems } = require('./src/commands.js');
 const { formatDbResponse } = require('./src/helpers.js');
