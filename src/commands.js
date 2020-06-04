@@ -1,54 +1,24 @@
-const { validateDate } = require('./helpers.js');
-const { JsonDB } = require('node-json-db');
-const { Config } = require('node-json-db/dist/lib/JsonDBConfig');
-const fs = require('fs');
-const path = require('path');
+const bot = require('./bot');
+const { validateDate } = require('./helpers');
 
-// Initialize JsonDB
-let db = new JsonDB(new Config('grocery-list', true, true, '/'));
+let addGroceryItem = (msg, match) => {
+    let userInput = match[1].split(/\s+/g);
+    let groceryItem = userInput.slice(0, [userInput.length - 1]);
+    let groceryExpirationDate = userInput[userInput.length - 1];
+    let isDateValid = validateDate(groceryExpirationDate);
 
-let addGroceryItem = (ctx) => {
-    let splitInput = ctx.message.text.split(/\s+/g);
-    if (splitInput[1] == null) {
-        ctx.reply('Grocery item is missing. Please enter it properly');
-        return;
+    if (userInput == null) {
+        bot.sendMessage(msg.chat.id, 'Grocery item is missing. Please enter it properly');
+    } else if (!isDateValid) {
+        let warning = 'Your date is incorrect\\. Please enter the correct date in the following format: *`DD.MM.YYYY`*';
+        bot.sendMessage(msg.chat.id, warning, {
+            parse_mode: 'MarkdownV2'
+        });
+    } else {
+        bot.sendMessage(msg.chat.id, `Grocery: ${groceryItem.join(' ')}; Expiration date: ${groceryExpirationDate}`)
     }
-    let isDataValid = validateDate(splitInput[splitInput.length-1]);
-    if (!isDataValid) {
-        ctx.replyWithMarkdown('Your date is incorrect. Please enter the correct date in the following format: `YYYY.MM.DD`');
-        return;
-    }
-    let findGrocery = splitInput.slice(1, [splitInput.length-1]);
-    let groceryItem = findGrocery.join(' ');
-    let userId = ctx.from.id;
-    let dataSet = {
-        grocery: groceryItem,
-        expiration_date: splitInput[splitInput.length-1]
-    };
-    db.push(`/${userId}`, [dataSet], false);
-    return ctx.replyWithMarkdown(`*Added*. Your product is *${dataSet.grocery}* that expires at *${dataSet.expiration_date}*`);
-}
-
-let getGroceryItems = (userId) => {
-    let contents = JSON.parse(fs.readFileSync(path.resolve('grocery-list.json'), 'utf8'));
-    let filteredContent = Array.from(contents[userId + '']);
-    return filteredContent;
-}
-
-// TODO: expiration is not currently set - anything bigger than Date.now() is good
-let getExpiringGroceryItems = (userId) => {
-    let currentDate = Date.now();
-    let contents = JSON.parse(fs.readFileSync(path.resolve('grocery-list.json'), 'utf8'));
-    let filteredContent = Array.from(contents[userId + '']);
-    let listOfExpiringItems = filteredContent.filter(item => {
-        let itemExpirationInMs = new Date(item.expiration_date).getTime();
-        return itemExpirationInMs > currentDate;
-    });
-    return listOfExpiringItems;
 }
 
 module.exports = {
-    addGroceryItem,
-    getGroceryItems,
-    getExpiringGroceryItems
+    addGroceryItem
 }
