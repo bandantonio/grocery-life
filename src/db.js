@@ -6,7 +6,7 @@ let db = new JsonDB(new Config("grocery-list", true, true, '/'));
 
 let saveToDatabase = (userId, groceryItem, expirationDate) => {
     let dataSet = {
-        grocery: groceryItem[0],
+        grocery: groceryItem.join(' '),
         expiration_date: expirationDate
     }
     db.push(`/${userId}`, [dataSet], false);
