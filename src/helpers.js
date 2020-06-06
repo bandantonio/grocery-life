@@ -3,6 +3,11 @@ let validateDate = (date) => {
     return (date.match(dateRegex) ? true : false);
 }
 
+let daysToMilliseconds = (days) => {
+    return days * 24 * 60 * 60 * 1000;
+}
+
 module.exports = {
-    validateDate
+    validateDate,
+    daysToMilliseconds
 }
