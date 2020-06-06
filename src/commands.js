@@ -1,12 +1,11 @@
 const bot = require('./bot');
 const { validateDate } = require('./helpers');
-const { saveToDatabase } = require('./db')
+const { saveToDatabase, getFromDatabase } = require('./db')
 
 let addGroceryItem = (msg, match) => {
     let userInput = match[1].split(/\s+/g);
     let groceryItem = userInput.slice(0, [userInput.length - 1]);
     let groceryExpirationDate = userInput[userInput.length - 1];
-    
     let isDateValid = validateDate(groceryExpirationDate);
     if (userInput == null) {
         bot.sendMessage(msg.chat.id, 'Grocery item is missing. Please enter it properly');
@@ -24,6 +23,15 @@ let addGroceryItem = (msg, match) => {
     }
 }
 
+let getGroceryItems = (userId) => {
+    let retrievedItems = getFromDatabase(userId);
+    let items = retrievedItems.map(item => {
+        return `${item.grocery} - ${item.expiration_date}`;
+    }).join('\n');
+    bot.sendMessage(userId, items);
+}
+
 module.exports = {
-    addGroceryItem
+    addGroceryItem,
+    getGroceryItems
 }
