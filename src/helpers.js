@@ -1,5 +1,5 @@
 let validateDate = (date) => {
-    let dateRegex = /^\d{1,2}[-.\/]\d{1,2}[-.\/]\d{4}$/gi;
+    let dateRegex = /^\d{4}[-.\/]\d{1,2}[-.\/]\d{1,2}$/gi;
     return (date.match(dateRegex) ? true : false);
 }
 

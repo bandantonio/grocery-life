@@ -10,7 +10,7 @@ let addGroceryItem = (msg, match) => {
     if (userInput == null) {
         bot.sendMessage(msg.chat.id, 'Grocery item is missing. Please enter it properly');
     } else if (!isDateValid) {
-        let warning = 'Your date is incorrect\\. Please enter the correct date in the following format: *`DD.MM.YYYY`*';
+        let warning = 'Your date is incorrect\\. Please enter the correct date in the following format: *`YYYY-MM-DD`*';
         bot.sendMessage(msg.chat.id, warning, {
             parse_mode: 'MarkdownV2'
         });
