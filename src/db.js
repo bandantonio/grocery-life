@@ -16,7 +16,12 @@ let getFromDatabase = (userId) => {
     return db.getData(`/${userId}`);
 }
 
+let getUserIds = () => {
+    return db.getData(`/`)
+}
+
 module.exports = {
     saveToDatabase,
-    getFromDatabase
+    getFromDatabase,
+    getUserIds
 }

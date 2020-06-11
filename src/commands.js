@@ -36,11 +36,10 @@ let getExpiringGroceryItems = (userId) => {
     let thresholdDays = process.env.THRESHOLD_DAYS;
     let threshold = Date.now() + daysToMilliseconds(thresholdDays);
     let retrievedItems = getFromDatabase(userId);
-    let expiringItems = retrievedItems.filter(item => {
+    return retrievedItems.filter(item => {
         let groceryExpirationTime = new Date(item.expiration_date).getTime();
         return groceryExpirationTime >= threshold;
     });
-    bot.sendMessage(userId, JSON.stringify(expiringItems));
 }
 
 module.exports = {

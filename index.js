@@ -1,4 +1,6 @@
 require('./server');
+const cronTask = require('./src/cron')
+
 const bot = require('./src/bot');
 const { addGroceryItem, getGroceryItems, getExpiringGroceryItems } = require('./src/commands');
 
@@ -11,5 +13,14 @@ bot.onText(/\/get/, (msg) => {
 });
 
 bot.onText(/\/expiring/, (msg) => {
-    getExpiringGroceryItems(msg.from.id);
-})
+    let expiringItems = getExpiringGroceryItems(msg.from.id);
+    bot.sendMessage(userId, JSON.stringify(expiringItems));
+});
+
+bot.onText(/\/cron/, (msg) => {
+    cronTask.start(msg.from.id)
+});
+
+bot.onText(/\/stop/, (msg) => {
+    cronTask.stop();
+});
