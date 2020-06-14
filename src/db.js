@@ -12,8 +12,17 @@ let saveToDatabase = (userId, groceryItem, expirationDate) => {
     db.push(`/${userId}`, [dataSet], false);
 }
 
-let getFromDatabase = (userId) => {
+let getFromDatabase = (userId, match) => {
     return db.getData(`/${userId}`);
+}
+
+let deleteFromDatabase = (userId, match) => {
+    if (match[1] === 'all') {
+        db.delete(`/${userId}`);
+    } else {
+        let grocery = match[1];
+        db.delete(`/${userId}` + '[' + db.getIndex(`/${userId}`, grocery, "grocery") + ']');
+    }
 }
 
 let getUserIds = () => {
@@ -23,5 +32,6 @@ let getUserIds = () => {
 module.exports = {
     saveToDatabase,
     getFromDatabase,
+    deleteFromDatabase,
     getUserIds
 }
