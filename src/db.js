@@ -31,7 +31,8 @@ let deleteFromDatabase = (userId, match) => {
         db.delete(`/${userId}`);
     } else {
         let grocery = match[1];
-        db.delete(`/${userId}` + '[' + db.getIndex(`/${userId}`, grocery, "grocery") + ']');
+        let getGroceryIndex = db.getIndex(`/${userId}`, grocery, "grocery");
+        db.delete(`/${userId}` + '[' + getGroceryIndex + ']');
     }
 }
 
