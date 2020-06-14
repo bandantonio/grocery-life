@@ -1,6 +1,6 @@
 const bot = require('./bot');
 const { validateDate, daysToMilliseconds } = require('./helpers');
-const { saveToDatabase, getFromDatabase } = require('./db')
+const { saveToDatabase, getFromDatabase, deleteFromDatabase } = require('./db');
 require('dotenv').config();
 
 let addGroceryItem = (msg, match) => {
@@ -32,6 +32,10 @@ let getGroceryItems = (userId) => {
     bot.sendMessage(userId, items);
 }
 
+let deleteGroceryItems = (msg, match) => {
+    deleteFromDatabase(msg.from.id, match);
+}
+
 let getExpiringGroceryItems = (userId) => {
     let thresholdDays = process.env.THRESHOLD_DAYS;
     let threshold = Date.now() + daysToMilliseconds(thresholdDays);
@@ -45,5 +49,6 @@ let getExpiringGroceryItems = (userId) => {
 module.exports = {
     addGroceryItem,
     getGroceryItems,
+    deleteGroceryItems,
     getExpiringGroceryItems
 }
