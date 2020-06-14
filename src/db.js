@@ -12,8 +12,18 @@ let saveToDatabase = (userId, groceryItem, expirationDate) => {
     db.push(`/${userId}`, [dataSet], false);
 }
 
-let getFromDatabase = (userId) => {
-    return db.getData(`/${userId}`);
+let getFromDatabase = (userId, match) => {
+    if (match[1] === 'all') {
+        let retrievedItems = db.getData(`/${userId}`);
+        return retrievedItems.map(item => {
+            return `${item.grocery} - ${item.expiration_date}`;
+        }).join('\n');
+    } else {
+        let grocery = match[1];
+        let getGroceryIndex = db.getIndex(`/${userId}`, grocery, "grocery");
+        let groceryItem = db.getData(`/${userId}` + '[' + getGroceryIndex + ']');
+        return `${groceryItem.grocery} - ${groceryItem.expiration_date}`;
+    }
 }
 
 let deleteFromDatabase = (userId, match) => {
