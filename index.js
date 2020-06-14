@@ -8,8 +8,9 @@ bot.onText(/\/add (.+)/, (msg, match) => {
     addGroceryItem(msg, match);
 });
 
-bot.onText(/\/get/, (msg) => {
-    getGroceryItems(msg.from.id);
+bot.onText(/\/get (.+)/, (msg, match) => {
+    let items = getGroceryItems(msg.from.id, match);
+    bot.sendMessage(msg.from.id, items);
 });
 
 bot.onText(/\/delete (.+)/, (msg, match) => {

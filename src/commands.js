@@ -24,12 +24,8 @@ let addGroceryItem = (msg, match) => {
     }
 }
 
-let getGroceryItems = (userId) => {
-    let retrievedItems = getFromDatabase(userId);
-    let items = retrievedItems.map(item => {
-        return `${item.grocery} - ${item.expiration_date}`;
-    }).join('\n');
-    bot.sendMessage(userId, items);
+let getGroceryItems = (userId, match) => {
+    return getFromDatabase(userId, match);
 }
 
 let deleteGroceryItems = (msg, match) => {
