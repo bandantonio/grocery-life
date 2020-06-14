@@ -12,7 +12,7 @@ let saveToDatabase = (userId, groceryItem, expirationDate) => {
     db.push(`/${userId}`, [dataSet], false);
 }
 
-let getFromDatabase = (userId, match) => {
+let getFromDatabase = (userId) => {
     return db.getData(`/${userId}`);
 }
 
