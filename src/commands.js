@@ -1,6 +1,6 @@
 const bot = require('./bot');
 const { validateDate, daysToMilliseconds } = require('./helpers');
-const { saveToDatabase, getFromDatabase, deleteFromDatabase } = require('./db');
+const { saveToDatabase, getFromDatabase, deleteFromDatabase, enableCronForUser, disableCronForUser } = require('./db');
 require('dotenv').config();
 
 let addGroceryItem = (msg, match) => {
@@ -42,9 +42,19 @@ let getExpiringGroceryItems = (userId) => {
     });
 }
 
+let enableCronNotifications = (userId) => {
+    enableCronForUser(userId);
+}
+
+let disableCronNotifications = (userId) => {
+    disableCronForUser(userId);
+}
+
 module.exports = {
     addGroceryItem,
     getGroceryItems,
     deleteGroceryItems,
-    getExpiringGroceryItems
+    getExpiringGroceryItems,
+    enableCronNotifications,
+    disableCronNotifications
 }
